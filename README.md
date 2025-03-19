@@ -1,3 +1,5 @@
+# Python script to process speedTest Tracker results and calculate rebate from downtime.
+
 ## Rebate Calculation logic (monthly)
 
 - Slot size: 1 Hour
