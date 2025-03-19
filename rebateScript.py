@@ -9,7 +9,7 @@ MONTHLY_BILL = 580
 SPEED_THRESHOLD = 25 * 1e6  # 25 Mbps in bps
 LOW_SPEED_THRESHOLD = 10 * 1e6
 
-if len(sys.argv) <= 1:
+if  len(sys.argv) <= 1:
     print("Pass csv file as argument")
     sys.exit(1)
 else:
@@ -25,10 +25,6 @@ def process_speedtest(csv_file):
     df["Download_Mbps"] = df["Download"].div(1e6).fillna(0)
     df["Upload_Mbps"] = df["Upload"].div(1e6).fillna(0)
     df["Status"] = df["Status"].fillna("Unknown")
-
-    #Handle Failed Status
-    df.loc[df["Status"] == "Failed", "Download_Mbps"] = 0
-
 
     # Scatter Plot
     color_conditions = [
@@ -110,23 +106,6 @@ def process_speedtest(csv_file):
     plt.tight_layout()
     plt.savefig("internet_stability_heatmap.png")
     plt.close()
-
-    #Line Graph
-    df['color_line'] =  np.where(df['Download_Mbps'] == 0, 'red',
-                                np.where((df['Download_Mbps'] > 0) & (df['Download_Mbps'] <= 10), 'orange',
-                                np.where((df['Download_Mbps'] > 10) & (df['Download_Mbps'] <= 25), 'yellow', 'green')))
-
-    plt.figure(figsize=(15, 5))
-    plt.plot(df['Created at'], df['Download_Mbps'], marker='o', linestyle='-', color=df['color_line'])
-    plt.xlabel("Time")
-    plt.ylabel("Download Speed (Mbps)")
-    plt.title("Download Speed Line Graph")
-    plt.grid(True)
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.savefig("download_speed_line.png")
-    plt.close()
-
 
     # Rebate Output
     print(f"Total Slots: {total_slots}")
